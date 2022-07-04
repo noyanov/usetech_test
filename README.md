@@ -11,3 +11,8 @@ https://github.com/public-apis/public-apis
 Реализовать добавление/удаление в локальное избранное.
 Выбор библиотек и архитектурных решений нужно будет обосновать.
 
+
+
+Мной была выбрано API - Google Books API https://developers.google.com/books/
+
+Google Books is our effort to make book content more discoverable on the Web. Using the Google Books API, your application can perform full-text searches and retrieve book information, viewability and eBook availability. You can also manage your personal bookshelves.
