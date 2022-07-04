@@ -1,5 +1,4 @@
-# usetech_test
-Test for UseTech company
+# Test for UseTech company
 
 Реализовать приложение Android на Kotlin , которое будет обращаться к API из списка
 https://github.com/public-apis/public-apis
