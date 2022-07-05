@@ -26,4 +26,7 @@ android.permission.ACCESS_NETWORK_STATE
 Используем следующие библиотеки com.android.volley:volley - Google Volley для доступа в Интернет через HTTP запросы ( https://www.geeksforgeeks.org/volley-library-in-android/ )
 И библиотека Picasso для показа загрузки и показа миниатур com.squareup.picasso ( https://github.com/square/picasso )
 
-
+Выбор архитектуры приложения будет основан на рекомендациях Google по выбору архитектуры приложения ( https://developer.android.com/topic/architecture )
+UI слой представляет собой Activity - основное MainActivity в котором отображается список и второе activity BookDetailsActivity отображающее информацию о нажатом объекте.
+Presenter слой использует ViewModel
+Data слой представляет собой базу данных SQLite в которой хранятся избранные обьекты, попадающие туда из запросов в Internet
