@@ -20,7 +20,7 @@ Google Books is our effort to make book content more discoverable on the Web. Us
 Потребуется следующие разрешения:
 android.permission.INTERNET
 android.permission.ACCESS_NETWORK_STATE
- для доступа в интернет ( https://developer.android.com/training/basics/network-ops/connecting )
+ для доступа в интернет ( https://developer.android.com/training/basics/network-ops/connecting ). Согласно документации не требуется никаких запросов этих разрешений. (Note: Both the Internet and ACCESS_NETWORK_STATE permissions are normal permissions, which means they're granted at install time and don't need to be requested at runtime.)
  
 
 Используем следующие библиотеки com.android.volley:volley - Google Volley для доступа в Интернет через HTTP запросы ( https://www.geeksforgeeks.org/volley-library-in-android/ )
