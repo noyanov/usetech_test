@@ -20,10 +20,10 @@ Google Books is our effort to make book content more discoverable on the Web. Us
 Потребуется следующие разрешения:
 android.permission.INTERNET
 android.permission.ACCESS_NETWORK_STATE
- для доступа в интернет
+ для доступа в интернет ( https://developer.android.com/training/basics/network-ops/connecting )
  
 
-Используем следующие библиотеки com.android.volley:volley - Google Volley для доступа в Интернет через HTTP запросы
-И Picasso для показа миниатур com.squareup.picasso
+Используем следующие библиотеки com.android.volley:volley - Google Volley для доступа в Интернет через HTTP запросы ( https://www.geeksforgeeks.org/volley-library-in-android/ )
+И библиотека Picasso для показа загрузки и показа миниатур com.squareup.picasso ( https://github.com/square/picasso )
 
 
