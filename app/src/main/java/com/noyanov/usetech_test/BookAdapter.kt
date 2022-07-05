@@ -39,7 +39,7 @@ class BookAdapter     // creating constructor for array list and context.
         // below line is use to add on click listener for our item of recycler view.
         holder.itemView.setOnClickListener { // inside on click listener method we are calling a new activity
             // and passing all the data of that item in next intent.
-            val i = Intent(mcontext, BookDetails::class.java)
+            val i = Intent(mcontext, BookDetailsActivity::class.java)
             i.putExtra("title", title)
             i.putExtra("subtitle", subtitle)
             i.putExtra("authors", authors)

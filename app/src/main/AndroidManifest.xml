@@ -29,7 +29,7 @@
         </activity>
 
         <activity
-            android:name=".BookDetails"
+            android:name=".BookDetailsActivity"
             android:exported="true"
             android:label="@string/book_details_title"
             >

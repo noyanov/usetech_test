@@ -12,7 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.squareup.picasso.Picasso
 
 
-class BookDetails : AppCompatActivity() {
+class BookDetailsActivity : AppCompatActivity() {
     // creating variables for strings,text view, image views and button.
     var title: String? = null
     var subtitle: String? = null
@@ -75,7 +75,7 @@ class BookDetails : AppCompatActivity() {
         previewBtn?.setOnClickListener(View.OnClickListener {
             if (previewLink!!.isEmpty()) {
                 // below toast message is displayed when preview link is not present.
-                Toast.makeText(this@BookDetails, "No preview Link present", Toast.LENGTH_SHORT)
+                Toast.makeText(this@BookDetailsActivity, "No preview Link present", Toast.LENGTH_SHORT)
                     .show()
                 return@OnClickListener
             }
@@ -91,7 +91,7 @@ class BookDetails : AppCompatActivity() {
             if (buyLink!!.isEmpty()) {
                 // below toast message is displaying when buy link is empty.
                 Toast.makeText(
-                    this@BookDetails,
+                    this@BookDetailsActivity,
                     "No buy page present for this book",
                     Toast.LENGTH_SHORT
                 ).show()
