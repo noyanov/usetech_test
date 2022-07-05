@@ -16,3 +16,12 @@ https://github.com/public-apis/public-apis
 Мной была выбрано API - Google Books API https://developers.google.com/books/
 
 Google Books is our effort to make book content more discoverable on the Web. Using the Google Books API, your application can perform full-text searches and retrieve book information, viewability and eBook availability. You can also manage your personal bookshelves.
+
+Потребуется следующие разрешения:
+<uses-permission android:name="android.permission.INTERNET" />
+<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+Используем следующие библиотеки
+    implementation 'com.android.volley:volley:1.1.1'
+    implementation 'com.squareup.picasso:picasso:2.71828'
+
