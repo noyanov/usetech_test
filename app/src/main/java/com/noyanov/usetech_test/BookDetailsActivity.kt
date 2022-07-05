@@ -1,5 +1,6 @@
 package com.noyanov.usetech_test
 
+import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -8,11 +9,13 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.squareup.picasso.Picasso
 
 
 class BookDetailsActivity : AppCompatActivity() {
+
     // creating variables for strings,text view, image views and button.
     var title: String? = null
     var subtitle: String? = null
@@ -25,6 +28,9 @@ class BookDetailsActivity : AppCompatActivity() {
     var buyLink: String? = null
     var pageCount = 0
     private val authors: ArrayList<String>? = null
+    var bookid : String? = null
+    var json : String? = null
+
     var titleTV: TextView? = null
     var subtitleTV: TextView? = null
     var publisherTV: TextView? = null
@@ -33,7 +39,14 @@ class BookDetailsActivity : AppCompatActivity() {
     var publishDateTV: TextView? = null
     var previewBtn: Button? = null
     var buyBtn: Button? = null
+    var idBtnAddToFavorites : Button? = null
     private var bookIV: ImageView? = null
+
+    private val usetechViewModel: UsetechViewModel by viewModels {
+        UsetechViewModelFactory((application as UsetechApplication).repository)
+    }
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_book_details)
@@ -47,6 +60,7 @@ class BookDetailsActivity : AppCompatActivity() {
         publishDateTV = findViewById(R.id.idTVPublishDate)
         previewBtn = findViewById(R.id.idBtnPreview)
         buyBtn = findViewById(R.id.idBtnBuy)
+        idBtnAddToFavorites = findViewById(R.id.idBtnAddToFavorites)
         bookIV = findViewById(R.id.idIVbook)
 
         // getting the data which we have passed from our adapter class.
@@ -60,6 +74,8 @@ class BookDetailsActivity : AppCompatActivity() {
         previewLink = intent.getStringExtra("previewLink")
         infoLink = intent.getStringExtra("infoLink")
         buyLink = intent.getStringExtra("buyLink")
+        bookid = intent.getStringExtra("bookid")
+        json = intent.getStringExtra("json")
 
         // after getting the data we are setting
         // that data to our text views and image view.
@@ -103,6 +119,25 @@ class BookDetailsActivity : AppCompatActivity() {
             val i = Intent(Intent.ACTION_VIEW, uri)
             startActivity(i)
         })
+
+        idBtnAddToFavorites?.setOnClickListener {
+            if(bookid != null && json != null) {
+                val book = BookInfoRoom(bookid!!, json!!)
+                usetechViewModel.insert(book)
+            }
+            val replyIntent = Intent()
+            replyIntent.putExtra(BookDetailsActivity.EXTRA_REPLY_ID, bookid)
+            replyIntent.putExtra(BookDetailsActivity.EXTRA_REPLY_JSON, json)
+            setResult(Activity.RESULT_OK, replyIntent)
+            finish()
+        }
+
+
+    }
+
+    companion object {
+        const val EXTRA_REPLY_ID = "com.usetech.REPLY_ID"
+        const val EXTRA_REPLY_JSON = "com.usetech.REPLY_JSON"
     }
 }
 

@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
+        android:name=".UsetechApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -29,15 +30,34 @@
         </activity>
 
         <activity
+            android:name=".FindBookActivity"
+            android:exported="true"
+            android:label="@string/add_book_title"
+            >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".FindBookActivity" />
+        </activity>
+
+        <activity
             android:name=".BookDetailsActivity"
             android:exported="true"
             android:label="@string/book_details_title"
             >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
+                android:value=".FindBookActivity" />
         </activity>
 
+        <activity
+            android:name=".NewWordActivity"
+            android:exported="true"
+            android:label="@string/new_word_title"
+            >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".FindBookActivity" />
+        </activity>
 
     </application>
 

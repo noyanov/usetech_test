@@ -1,12 +1,64 @@
 package com.noyanov.usetech_test
 
+import org.json.JSONObject
 
-data class BookInfo     // creating a constructor class for our BookInfo
-    (// creating getter and setter methods
+
+class BookInfo     // creating a constructor class for our BookInfo
+{
+    // creating getter and setter methods
     // creating string, int and array list
     // variables for our book details
-    var title: String, var subtitle: String, var authors: ArrayList<String>, var publisher: String,
-    var publishedDate: String, var description: String, var pageCount: Int, var thumbnail: String,
-    var previewLink: String, var infoLink: String, var buyLink: String
-)
+    val title: String
+    val subtitle: String
+    val authors: ArrayList<String>
+    val publisher: String
+    val publishedDate: String
+    val description: String
+    val pageCount: Int
+    val thumbnail: String
+    val previewLink: String
+    val infoLink: String
+    val buyLink: String
+
+    val bookid : String
+    val json : String
+
+    //    constructor(
+//        // creating getter and setter methods
+//        // creating string, int and array list
+//        // variables for our book details
+//        bookid : String,
+//        json : String,
+//        title: String, subtitle: String, authors: ArrayList<String>, publisher: String,
+//        publishedDate: String, description: String, pageCount: Int, thumbnail: String,
+//        previewLink: String, infoLink: String, buyLink: String) {}
+
+    constructor(itemsObj: JSONObject)
+    {
+        this.json = itemsObj.toString()
+        this.bookid = itemsObj.optString("id")
+        val volumeObj = itemsObj.getJSONObject("volumeInfo")
+        this.title = volumeObj.optString("title")
+        this.subtitle = volumeObj.optString("subtitle")
+        val authorsArray = volumeObj.getJSONArray("authors")
+        this.publisher = volumeObj.optString("publisher")
+        this.publishedDate = volumeObj.optString("publishedDate")
+        this.description = volumeObj.optString("description")
+        this.pageCount = volumeObj.optInt("pageCount")
+        val imageLinks = volumeObj.optJSONObject("imageLinks")
+        this.thumbnail = if(imageLinks != null) imageLinks.optString("thumbnail") else ""
+        this.previewLink = volumeObj.optString("previewLink")
+        this.infoLink = volumeObj.optString("infoLink")
+        val saleInfoObj = itemsObj.optJSONObject("saleInfo")
+        this.buyLink = if(saleInfoObj != null) saleInfoObj.optString("buyLink") else ""
+        val authorsArrayList = ArrayList<String>()
+        if (authorsArray.length() != 0) {
+            for (j in 0 until authorsArray.length()) {
+                authorsArrayList.add(authorsArray.optString(j))
+            }
+        }
+        this.authors = authorsArrayList
+    }
+
+}
 

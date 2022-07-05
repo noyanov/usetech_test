@@ -13,48 +13,54 @@ import com.squareup.picasso.Picasso
 
 class BookAdapter     // creating constructor for array list and context.
     (// creating variables for arraylist and context.
-    private val bookInfoArrayList: ArrayList<BookInfo>, private val mcontext: Context
-) :
-    RecyclerView.Adapter<BookAdapter.BookViewHolder>() {
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookViewHolder {
-        // inflating our layout for item of recycler view item.
-        val view: View =
-            LayoutInflater.from(parent.context).inflate(R.layout.book_rv_item, parent, false)
-        return BookViewHolder(view)
+        private val bookInfoArrayList: ArrayList<BookInfo>, private val mcontext: Context
+    ) : RecyclerView.Adapter<BookAdapter.BookViewHolder>() {
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookViewHolder {
+            // inflating our layout for item of recycler view item.
+            val view: View =
+                LayoutInflater.from(parent.context).inflate(R.layout.book_rv_item, parent, false)
+            return BookViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: BookViewHolder, position: Int) {
+    companion object {
+        val detailsBookActivityRequestCode = 3
+    }
 
+
+    override fun onBindViewHolder(holder: BookViewHolder, position: Int) {
         // inside on bind view holder method we are
         // setting ou data to each UI component.
-        val (title, subtitle, authors, publisher, publishedDate, description, pageCount, thumbnail, previewLink, infoLink, buyLink) = bookInfoArrayList[position]
-        holder.nameTV.text = title
-        holder.publisherTV.text = publisher
-        holder.pageCountTV.text = "No of Pages : $pageCount"
-        holder.dateTV.text = publishedDate
+//        val (title, subtitle, authors, publisher, publishedDate, description, pageCount, thumbnail, previewLink, infoLink, buyLink, bookid, json) = bookInfoArrayList[position]
+        val bi = bookInfoArrayList[position]
+        holder.nameTV.text = bi.title
+        holder.publisherTV.text = bi.publisher
+        holder.pageCountTV.text = "No of Pages : ${bi.pageCount}"
+        holder.dateTV.text = bi.publishedDate
 
         // below line is use to set image from URL in our image view.
-        Picasso.get().load(thumbnail).into(holder.bookIV)
+        Picasso.get().load(bi.thumbnail).into(holder.bookIV)
 
         // below line is use to add on click listener for our item of recycler view.
         holder.itemView.setOnClickListener { // inside on click listener method we are calling a new activity
             // and passing all the data of that item in next intent.
             val i = Intent(mcontext, BookDetailsActivity::class.java)
-            i.putExtra("title", title)
-            i.putExtra("subtitle", subtitle)
-            i.putExtra("authors", authors)
-            i.putExtra("publisher", publisher)
-            i.putExtra("publishedDate", publishedDate)
-            i.putExtra("description", description)
-            i.putExtra("pageCount", pageCount)
-            i.putExtra("thumbnail", thumbnail)
-            i.putExtra("previewLink", previewLink)
-            i.putExtra("infoLink", infoLink)
-            i.putExtra("buyLink", buyLink)
+            i.putExtra("title", bi.title)
+            i.putExtra("subtitle", bi.subtitle)
+            i.putExtra("authors", bi.authors)
+            i.putExtra("publisher", bi.publisher)
+            i.putExtra("publishedDate", bi.publishedDate)
+            i.putExtra("description", bi.description)
+            i.putExtra("pageCount", bi.pageCount)
+            i.putExtra("thumbnail", bi.thumbnail)
+            i.putExtra("previewLink", bi.previewLink)
+            i.putExtra("infoLink", bi.infoLink)
+            i.putExtra("buyLink", bi.buyLink)
+            i.putExtra("json", bi.json)
+            i.putExtra("bookid", bi.bookid)
 
             // after passing that data we are
             // starting our new intent.
-            mcontext.startActivity(i)
+            mcontext.startActivity(i) //, detailsBookActivityRequestCode)
         }
     }
 
