@@ -123,7 +123,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="4dp"
                 android:layout_weight="1"
-                android:text="Buy"
+                android:text="@string/buy_book_title"
                 android:textAllCaps="false"
                 android:visibility="gone"
                 />
@@ -134,7 +134,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="4dp"
                 android:layout_weight="1"
-                android:text="Add to Favorites"
+                android:text="@string/add_favorites_title"
                 android:textAllCaps="false" />
 
         </LinearLayout>

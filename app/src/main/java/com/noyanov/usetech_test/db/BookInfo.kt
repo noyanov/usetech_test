@@ -1,4 +1,4 @@
-package com.noyanov.usetech_test
+package com.noyanov.usetech_test.db
 
 import org.json.JSONObject
 
@@ -22,6 +22,8 @@ class BookInfo     // creating a constructor class for our BookInfo
 
     val bookid : String
     val json : String
+
+    var isFavorite : Boolean
 
     //    constructor(
 //        // creating getter and setter methods
@@ -58,6 +60,7 @@ class BookInfo     // creating a constructor class for our BookInfo
             }
         }
         this.authors = authorsArrayList
+        this.isFavorite = false
     }
 
 }

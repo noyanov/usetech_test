@@ -11,7 +11,11 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import com.noyanov.usetech_test.db.BookInfoRoom
 import com.squareup.picasso.Picasso
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 
 class BookDetailsActivity : AppCompatActivity() {
@@ -30,6 +34,7 @@ class BookDetailsActivity : AppCompatActivity() {
     private val authors: ArrayList<String>? = null
     var bookid : String? = null
     var json : String? = null
+    var isFavorite : Boolean = false
 
     var titleTV: TextView? = null
     var subtitleTV: TextView? = null
@@ -76,6 +81,7 @@ class BookDetailsActivity : AppCompatActivity() {
         buyLink = intent.getStringExtra("buyLink")
         bookid = intent.getStringExtra("bookid")
         json = intent.getStringExtra("json")
+        isFavorite = intent.getBooleanExtra("isFavorite", false)
 
         // after getting the data we are setting
         // that data to our text views and image view.
@@ -120,17 +126,43 @@ class BookDetailsActivity : AppCompatActivity() {
             startActivity(i)
         })
 
-        idBtnAddToFavorites?.setOnClickListener {
-            if(bookid != null && json != null) {
-                val book = BookInfoRoom(bookid!!, json!!)
-                usetechViewModel.insert(book)
+        if(bookid != null) {
+            val abookid = bookid ?: ""
+            //CoroutineScope.launch { checkIsBookFavorite() }
+            runBlocking {
+                val isFavorite: Boolean = usetechViewModel.isFavoriteBook(abookid).await()
+                if(!isFavorite) { // the book is not in favorites -> we can add it
+                    idBtnAddToFavorites?.setText(R.string.add_favorites_title)
+                    idBtnAddToFavorites?.setOnClickListener {
+                        if (bookid != null && json != null) {
+                            val book = BookInfoRoom(bookid!!, json!!)
+                            usetechViewModel.insert(book)
+                        }
+                        val replyIntent = Intent()
+                        replyIntent.putExtra(BookDetailsActivity.EXTRA_REPLY_ID, bookid)
+                        replyIntent.putExtra(BookDetailsActivity.EXTRA_REPLY_JSON, json)
+                        setResult(Activity.RESULT_OK, replyIntent)
+                        finish()
+                    }
+                } else { // else the book is already in favorites -> we can remove it from there
+                    idBtnAddToFavorites?.setText(R.string.remove_favorites_title)
+                    idBtnAddToFavorites?.setOnClickListener {
+                        if (bookid != null) {
+                            usetechViewModel.delete(bookid!!)
+                        }
+                        val replyIntent = Intent()
+                        //                    replyIntent.putExtra(BookDetailsActivity.EXTRA_REPLY_ID, bookid)
+                        //                    replyIntent.putExtra(BookDetailsActivity.EXTRA_REPLY_JSON, json)
+                        setResult(Activity.RESULT_OK, replyIntent)
+                        finish()
+                    }
+                }
             }
-            val replyIntent = Intent()
-            replyIntent.putExtra(BookDetailsActivity.EXTRA_REPLY_ID, bookid)
-            replyIntent.putExtra(BookDetailsActivity.EXTRA_REPLY_JSON, json)
-            setResult(Activity.RESULT_OK, replyIntent)
-            finish()
+
+        } else {
+            idBtnAddToFavorites?.visibility = View.GONE
         }
+
 
 
     }

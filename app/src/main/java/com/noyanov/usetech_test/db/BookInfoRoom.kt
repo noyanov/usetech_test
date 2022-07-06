@@ -1,4 +1,4 @@
-package com.noyanov.usetech_test
+package com.noyanov.usetech_test.db
 
 import android.util.Log
 import androidx.room.ColumnInfo

@@ -1,6 +1,7 @@
-package com.noyanov.usetech_test
+package com.noyanov.usetech_test.db
 
 import androidx.annotation.WorkerThread
+import androidx.room.Query
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -21,4 +22,14 @@ class BookRepository(private val bookDao: BookDao) {
     suspend fun insert(book: BookInfoRoom) {
         bookDao.insert(book)
     }
+
+    @WorkerThread
+    suspend fun delete(bookid: String) {
+        bookDao.delete(bookid)
+    }
+
+     suspend fun getBookById(bookId: String): BookInfoRoom? {
+        return bookDao.getBookById(bookId)
+    }
+
 }

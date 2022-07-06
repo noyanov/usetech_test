@@ -11,10 +11,11 @@ import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.noyanov.usetech_test.db.BookInfoRoom
 
 class MainActivity : AppCompatActivity() {
 
-    private val newWordActivityRequestCode = 1
+//    private val newWordActivityRequestCode = 1
     private val addBookActivityRequestCode = 2
     private val usetechViewModel: UsetechViewModel by viewModels {
         UsetechViewModelFactory((application as UsetechApplication).repository)
@@ -49,24 +50,20 @@ class MainActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, intentData: Intent?) {
         super.onActivityResult(requestCode, resultCode, intentData)
-
-        if (requestCode == newWordActivityRequestCode && resultCode == Activity.RESULT_OK) {
-            intentData?.getStringExtra(NewWordActivity.EXTRA_REPLY)?.let { reply ->
-                val book = BookInfoRoom(reply, reply)
-                usetechViewModel.insert(book)
-            }
-        } else if (requestCode == addBookActivityRequestCode && resultCode == Activity.RESULT_OK) {
-            intentData?.getStringExtra(NewWordActivity.EXTRA_REPLY)?.let { reply ->
-                val book = BookInfoRoom(reply, reply)
-                usetechViewModel.insert(book)
-            }
+        if (requestCode == addBookActivityRequestCode && resultCode == Activity.RESULT_OK) {
+            val recyclerView = findViewById<RecyclerView>(R.id.recyclerview)
+            recyclerView.adapter?.notifyDataSetChanged()
+//            intentData?.getStringExtra(NewWordActivity.EXTRA_REPLY)?.let { reply ->
+//                val book = BookInfoRoom(reply, reply)
+//                usetechViewModel.insert(book)
+//            }
         }
-        else {
-            Toast.makeText(
-                applicationContext,
-                R.string.empty_not_saved,
-                Toast.LENGTH_LONG
-            ).show()
-        }
+//        else {
+//            Toast.makeText(
+//                applicationContext,
+//                R.string.empty_not_saved,
+//                Toast.LENGTH_LONG
+//            ).show()
+//        }
     }
 }

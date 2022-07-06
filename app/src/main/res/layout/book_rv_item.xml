@@ -65,6 +65,16 @@
             android:textColor="@color/black"
             android:textSize="11sp" />
 
+        <ImageView
+            android:id="@+id/idIVFavorites"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_margin="10dp"
+            android:layout_below="@id/idTVDate"
+            android:layout_toRightOf="@id/idIVbook"
+            android:src="@drawable/ic_favorite_on"
+            />
+
     </RelativeLayout>
 
 </androidx.cardview.widget.CardView>

@@ -1,10 +1,7 @@
-package com.noyanov.usetech_test
+package com.noyanov.usetech_test.db
 
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -27,9 +24,15 @@ interface BookDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(book: BookInfoRoom)
 
+    @Query("DELETE FROM book_table WHERE bookid = :bookId")
+    suspend fun delete(bookId: String): Int
+
     @Query("DELETE FROM book_table")
     suspend fun deleteAll()
 
     @Query("SELECT COUNT() FROM book_table")
     suspend fun getCount() : Int
+
+    @Query("SELECT * FROM book_table WHERE bookid = :bookId")
+    suspend fun getBookById(bookId: String?): BookInfoRoom?
 }

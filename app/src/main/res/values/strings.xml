@@ -9,5 +9,8 @@
     <string name="button_save">Save</string>
     <string name="add_book_title">Find and Add book</string>
     <string name="book_title_hint">Book title to findTit</string>
+    <string name="buy_book_title">Buy</string>
+    <string name="add_favorites_title">Add to Favorites</string>
+    <string name="remove_favorites_title">Remove from Favorites</string>
 
 </resources>

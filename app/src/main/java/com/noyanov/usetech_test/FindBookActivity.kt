@@ -8,6 +8,7 @@ import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ProgressBar
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -16,6 +17,9 @@ import com.android.volley.RequestQueue
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
+import com.noyanov.usetech_test.db.BookInfo
+import com.noyanov.usetech_test.db.BookInfoRoom
+import kotlinx.coroutines.runBlocking
 import org.json.JSONException
 import org.json.JSONObject
 
@@ -29,6 +33,10 @@ class FindBookActivity : AppCompatActivity() {
     private var progressBar: ProgressBar? = null
     private var searchEdt: EditText? = null
     private var searchBtn: ImageButton? = null
+    private val usetechViewModel: UsetechViewModel by viewModels {
+        UsetechViewModelFactory((application as UsetechApplication).repository)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_find)
@@ -86,6 +94,12 @@ class FindBookActivity : AppCompatActivity() {
                     for (i in 0 until itemsArray.length()) {
                         val itemsObj = itemsArray.getJSONObject(i)
                         val bookInfo = BookInfo(itemsObj)
+
+                        runBlocking {
+                            bookInfo.isFavorite =
+                                usetechViewModel.isFavoriteBook(bookInfo.bookid).await()
+                        }
+
 //                        val json = itemsObj.toString()
 //                        val bookid = itemsObj.optString("id")
 //                        val volumeObj = itemsObj.getJSONObject("volumeInfo")

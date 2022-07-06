@@ -5,7 +5,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
+import com.noyanov.usetech_test.db.BookInfoRoom
+import com.noyanov.usetech_test.db.BookRepository
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.async
+import kotlinx.coroutines.runBlocking
 
 /**
  * View Model to keep a reference to the word repository and
@@ -26,6 +30,15 @@ class UsetechViewModel(private val repository: BookRepository) : ViewModel() {
         fun insert(book: BookInfoRoom) = viewModelScope.launch {
                 repository.insert(book)
         }
+
+        /**
+         * Launching a new coroutine to insert the data in a non-blocking way
+         */
+        fun delete(bookid: String) = viewModelScope.launch {
+                repository.delete(bookid)
+        }
+
+        fun isFavoriteBook(bookid: String) = viewModelScope.async { repository.getBookById(bookid) != null }
 }
 
 class UsetechViewModelFactory(private val repository: BookRepository) : ViewModelProvider.Factory {

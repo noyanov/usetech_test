@@ -1,6 +1,8 @@
 package com.noyanov.usetech_test
 
 import android.app.Application
+import com.noyanov.usetech_test.db.BookDatabase
+import com.noyanov.usetech_test.db.BookRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 

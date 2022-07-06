@@ -8,12 +8,13 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.noyanov.usetech_test.db.BookInfo
 import com.squareup.picasso.Picasso
 
 
 class BookAdapter     // creating constructor for array list and context.
     (// creating variables for arraylist and context.
-        private val bookInfoArrayList: ArrayList<BookInfo>, private val mcontext: Context
+    private val bookInfoArrayList: ArrayList<BookInfo>, private val mcontext: Context
     ) : RecyclerView.Adapter<BookAdapter.BookViewHolder>() {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookViewHolder {
             // inflating our layout for item of recycler view item.
@@ -36,6 +37,7 @@ class BookAdapter     // creating constructor for array list and context.
         holder.publisherTV.text = bi.publisher
         holder.pageCountTV.text = "No of Pages : ${bi.pageCount}"
         holder.dateTV.text = bi.publishedDate
+        holder.favoriteIV.visibility = View.VISIBLE
 
         // below line is use to set image from URL in our image view.
         Picasso.get().load(bi.thumbnail).into(holder.bookIV)
@@ -57,6 +59,7 @@ class BookAdapter     // creating constructor for array list and context.
             i.putExtra("buyLink", bi.buyLink)
             i.putExtra("json", bi.json)
             i.putExtra("bookid", bi.bookid)
+            i.putExtra("isFavorite", bi.isFavorite)
 
             // after passing that data we are
             // starting our new intent.
@@ -78,6 +81,7 @@ class BookAdapter     // creating constructor for array list and context.
         var pageCountTV: TextView
         var dateTV: TextView
         var bookIV: ImageView
+        var favoriteIV: ImageView
 
         init {
             nameTV = itemView.findViewById(R.id.idTVBookTitle)
@@ -85,6 +89,7 @@ class BookAdapter     // creating constructor for array list and context.
             pageCountTV = itemView.findViewById(R.id.idTVPageCount)
             dateTV = itemView.findViewById(R.id.idTVDate)
             bookIV = itemView.findViewById(R.id.idIVbook)
+            favoriteIV = itemView.findViewById(R.id.idIVFavorites)
         }
     }
 }

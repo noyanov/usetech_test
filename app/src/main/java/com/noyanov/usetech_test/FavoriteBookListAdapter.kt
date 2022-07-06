@@ -8,6 +8,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.noyanov.usetech_test.db.BookInfo
+import com.noyanov.usetech_test.db.BookInfoRoom
 import com.squareup.picasso.Picasso
 
 class FavoriteBookListAdapter : ListAdapter<BookInfoRoom, FavoriteBookListAdapter.FavoriteBookViewHolder>(BOOKS_COMPARATOR) {
