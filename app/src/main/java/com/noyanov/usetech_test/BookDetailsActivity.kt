@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
@@ -95,7 +96,7 @@ class BookDetailsActivity : AppCompatActivity() {
 
         // adding on click listener for our preview button.
         previewBtn?.setOnClickListener(View.OnClickListener {
-            if (previewLink!!.isEmpty()) {
+            if (previewLink != null && previewLink!!.isEmpty()) {
                 // below toast message is displayed when preview link is not present.
                 Toast.makeText(this@BookDetailsActivity, "No preview Link present", Toast.LENGTH_SHORT)
                     .show()
@@ -103,14 +104,18 @@ class BookDetailsActivity : AppCompatActivity() {
             }
             // if the link is present we are opening
             // that link via an intent.
-            val uri = Uri.parse(previewLink)
-            val i = Intent(Intent.ACTION_VIEW, uri)
-            startActivity(i)
+            try {
+                val uri = Uri.parse(previewLink)
+                val i = Intent(Intent.ACTION_VIEW, uri)
+                startActivity(i)
+            } catch(e:Exception) {
+                Log.e("BUG", e.localizedMessage)
+            }
         })
 
         // initializing on click listener for buy button.
         buyBtn?.setOnClickListener(View.OnClickListener {
-            if (buyLink!!.isEmpty()) {
+            if (buyLink != null && buyLink!!.isEmpty()) {
                 // below toast message is displaying when buy link is empty.
                 Toast.makeText(
                     this@BookDetailsActivity,
