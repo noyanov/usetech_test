@@ -16,7 +16,7 @@ import com.squareup.picasso.Picasso
 
 class BookAdapter     // creating constructor for array list and context.
     (// creating variables for arraylist and context.
-    private val bookInfoArrayList: ArrayList<BookInfo>, private val mcontext: Context
+    private var bookInfoArrayList: ArrayList<BookInfo>, private val mcontext: Context
     ) : RecyclerView.Adapter<BookAdapter.BookViewHolder>(), Filterable {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookViewHolder {
             // inflating our layout for item of recycler view item.
@@ -24,8 +24,6 @@ class BookAdapter     // creating constructor for array list and context.
                 LayoutInflater.from(parent.context).inflate(R.layout.book_rv_item, parent, false)
             return BookViewHolder(view)
     }
-
-    var bookInfoArrayListFiltered : ArrayList<BookInfo> = ArrayList()
 
     companion object {
         val detailsBookActivityRequestCode = 3
@@ -41,7 +39,7 @@ class BookAdapter     // creating constructor for array list and context.
         holder.publisherTV.text = bi.publisher
         holder.pageCountTV.text = "No of Pages : ${bi.pageCount}"
         holder.dateTV.text = bi.publishedDate
-        holder.favoriteIV.visibility = View.VISIBLE
+        holder.favoriteIV.visibility = if(bi.isFavorite) View.VISIBLE else View.GONE
 
         // below line is use to set image from URL in our image view.
         Picasso.get().load(bi.thumbnail).into(holder.bookIV)
@@ -74,7 +72,7 @@ class BookAdapter     // creating constructor for array list and context.
     override fun getItemCount(): Int {
         // inside get item count method we
         // are returning the size of our array list.
-        return bookInfoArrayListFiltered.size
+        return bookInfoArrayList.size
     }
 
     inner class BookViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -101,6 +99,7 @@ class BookAdapter     // creating constructor for array list and context.
         return object : Filter() {
             override fun performFiltering(constraint: CharSequence?): FilterResults {
                 val charString = constraint?.toString() ?: ""
+                var bookInfoArrayListFiltered : ArrayList<BookInfo> = ArrayList()
                 if (charString.isEmpty()) bookInfoArrayListFiltered = bookInfoArrayList else {
                     val filteredList = ArrayList<BookInfo>()
                     bookInfoArrayList
@@ -117,7 +116,7 @@ class BookAdapter     // creating constructor for array list and context.
             }
 
             override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
-                bookInfoArrayListFiltered = if (results?.values == null)
+                bookInfoArrayList = if (results?.values == null)
                     ArrayList()
                 else
                     results.values as ArrayList<BookInfo>

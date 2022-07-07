@@ -1,5 +1,6 @@
 package com.noyanov.usetech_test.db
 
+import org.json.JSONException
 import org.json.JSONObject
 
 
@@ -42,7 +43,17 @@ class BookInfo     // creating a constructor class for our BookInfo
         val volumeObj = itemsObj.getJSONObject("volumeInfo")
         this.title = volumeObj.optString("title")
         this.subtitle = volumeObj.optString("subtitle")
-        val authorsArray = volumeObj.getJSONArray("authors")
+        val authorsArrayList = ArrayList<String>()
+        try {
+            val authorsArray = volumeObj.getJSONArray("authors")
+            if (authorsArray.length() != 0) {
+                for (j in 0 until authorsArray.length()) {
+                    authorsArrayList.add(authorsArray.optString(j))
+                }
+            }
+        } catch(e:JSONException) { // just no authors
+        }
+        this.authors = authorsArrayList
         this.publisher = volumeObj.optString("publisher")
         this.publishedDate = volumeObj.optString("publishedDate")
         this.description = volumeObj.optString("description")
@@ -53,14 +64,7 @@ class BookInfo     // creating a constructor class for our BookInfo
         this.infoLink = volumeObj.optString("infoLink")
         val saleInfoObj = itemsObj.optJSONObject("saleInfo")
         this.buyLink = if(saleInfoObj != null) saleInfoObj.optString("buyLink") else ""
-        val authorsArrayList = ArrayList<String>()
-        if (authorsArray.length() != 0) {
-            for (j in 0 until authorsArray.length()) {
-                authorsArrayList.add(authorsArray.optString(j))
-            }
-        }
-        this.authors = authorsArrayList
-        this.isFavorite = false
+        this.isFavorite = true
     }
 
 }

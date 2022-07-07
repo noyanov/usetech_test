@@ -15,7 +15,7 @@ import kotlinx.coroutines.launch
  * The fact that this has very few comments emphasizes its coolness.
  */
 
-@Database(entities = [BookInfoRoom::class], version = 2, exportSchema = false)
+@Database(entities = [BookInfoRoom::class], version = 1, exportSchema = false)
 abstract class BookDatabase : RoomDatabase() {
 
     abstract fun bookDao(): BookDao
@@ -67,18 +67,18 @@ abstract class BookDatabase : RoomDatabase() {
 
         /**
          * Populate the database in a new coroutine.
-         * If you want to start with more words, just add them.
+         * Example books will be added
          */
         suspend fun populateDatabase(bookDao: BookDao) {
             // Start the app with a clean database every time.
             // Not needed if you only populate on creation.
             bookDao.deleteAll()
-            if(bookDao.getCount() == 0) {
+            //if(bookDao.getCount() == 0) {
                 for((bookid, json) in BookDatabaseExample.example) {
                     var book = BookInfoRoom(bookid, json)
                     bookDao.insert(book)
                 }
-            }
+            //}
         }
     }
 }

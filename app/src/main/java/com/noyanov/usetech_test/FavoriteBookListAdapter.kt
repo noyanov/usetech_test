@@ -1,5 +1,7 @@
 package com.noyanov.usetech_test
 
+import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,7 +16,7 @@ import com.noyanov.usetech_test.db.BookInfo
 import com.noyanov.usetech_test.db.BookInfoRoom
 import com.squareup.picasso.Picasso
 
-class FavoriteBookListAdapter : ListAdapter<BookInfoRoom, FavoriteBookListAdapter.FavoriteBookViewHolder>(BOOKS_COMPARATOR), Filterable
+class FavoriteBookListAdapter(private val mcontext: Context) : ListAdapter<BookInfoRoom, FavoriteBookListAdapter.FavoriteBookViewHolder>(BOOKS_COMPARATOR), Filterable
 {
     var initialList : List<BookInfoRoom> = ArrayList()
 
@@ -30,8 +32,32 @@ class FavoriteBookListAdapter : ListAdapter<BookInfoRoom, FavoriteBookListAdapte
     override fun onBindViewHolder(holder: FavoriteBookViewHolder, position: Int) {
         val current = getItem(position)
         val bi = current.getBookInfo()
-        if(bi != null)
+        if(bi != null) {
             holder.bind(bi)
+            // below line is use to add on click listener for our item of recycler view.
+            holder.itemView.setOnClickListener { // inside on click listener method we are calling a new activity
+                // and passing all the data of that item in next intent.
+                val i = Intent(mcontext, BookDetailsActivity::class.java)
+                i.putExtra("title", bi.title)
+                i.putExtra("subtitle", bi.subtitle)
+                i.putExtra("authors", bi.authors)
+                i.putExtra("publisher", bi.publisher)
+                i.putExtra("publishedDate", bi.publishedDate)
+                i.putExtra("description", bi.description)
+                i.putExtra("pageCount", bi.pageCount)
+                i.putExtra("thumbnail", bi.thumbnail)
+                i.putExtra("previewLink", bi.previewLink)
+                i.putExtra("infoLink", bi.infoLink)
+                i.putExtra("buyLink", bi.buyLink)
+                i.putExtra("json", bi.json)
+                i.putExtra("bookid", bi.bookid)
+                i.putExtra("isFavorite", bi.isFavorite)
+
+                // after passing that data we are
+                // starting our new intent.
+                mcontext.startActivity(i) //, detailsBookActivityRequestCode)
+            }
+        }
     }
 
     class FavoriteBookViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

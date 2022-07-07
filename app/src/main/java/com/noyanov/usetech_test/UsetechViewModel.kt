@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
+import com.noyanov.usetech_test.db.BookInfo
 import com.noyanov.usetech_test.db.BookInfoRoom
 import com.noyanov.usetech_test.db.BookRepository
 import kotlinx.coroutines.launch
@@ -39,6 +40,12 @@ class UsetechViewModel(private val repository: BookRepository) : ViewModel() {
         }
 
         fun isFavoriteBook(bookid: String) = viewModelScope.async { repository.getBookById(bookid) != null }
+
+        fun setIsFavorite(bookInfo : BookInfo) = viewModelScope.launch {
+                val isFavorite = repository.getBookById(bookInfo.bookid) != null
+                bookInfo.isFavorite = isFavorite
+        }
+
 }
 
 class UsetechViewModelFactory(private val repository: BookRepository) : ViewModelProvider.Factory {

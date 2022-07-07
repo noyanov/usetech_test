@@ -129,8 +129,8 @@ class BookDetailsActivity : AppCompatActivity() {
         if(bookid != null) {
             val abookid = bookid ?: ""
             //CoroutineScope.launch { checkIsBookFavorite() }
-            runBlocking {
-                val isFavorite: Boolean = usetechViewModel.isFavoriteBook(abookid).await()
+            //runBlocking {
+            //    val isFavorite: Boolean = usetechViewModel.isFavoriteBook(abookid).await()
                 if(!isFavorite) { // the book is not in favorites -> we can add it
                     idBtnAddToFavorites?.setText(R.string.add_favorites_title)
                     idBtnAddToFavorites?.setOnClickListener {
@@ -157,7 +157,7 @@ class BookDetailsActivity : AppCompatActivity() {
                         finish()
                     }
                 }
-            }
+            //}
 
         } else {
             idBtnAddToFavorites?.visibility = View.GONE

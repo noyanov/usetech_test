@@ -10,6 +10,7 @@ import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.Request
@@ -19,6 +20,7 @@ import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.noyanov.usetech_test.db.BookInfo
 import com.noyanov.usetech_test.db.BookInfoRoom
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.json.JSONException
 import org.json.JSONObject
@@ -92,73 +94,32 @@ class FindBookActivity : AppCompatActivity() {
                     //val obj: JSONObject = response
                     val itemsArray = response.getJSONArray("items")
                     for (i in 0 until itemsArray.length()) {
-                        val itemsObj = itemsArray.getJSONObject(i)
-                        val bookInfo = BookInfo(itemsObj)
-
-                        runBlocking {
-                            bookInfo.isFavorite =
-                                usetechViewModel.isFavoriteBook(bookInfo.bookid).await()
+                        try {
+                            val itemsObj = itemsArray.getJSONObject(i)
+                            val bookInfo = BookInfo(itemsObj)
+                            bookInfo.isFavorite = false
+                            usetechViewModel.setIsFavorite(bookInfo)
+                            // below line is use to pass our modal
+                            // class in our array list.
+                            bookInfoArrayList!!.add(bookInfo)
+                        } catch(e: JSONException) {
+                            // just skip the item
                         }
-
-//                        val json = itemsObj.toString()
-//                        val bookid = itemsObj.optString("id")
-//                        val volumeObj = itemsObj.getJSONObject("volumeInfo")
-//                        val title = volumeObj.optString("title")
-//                        val subtitle = volumeObj.optString("subtitle")
-//                        val authorsArray = volumeObj.getJSONArray("authors")
-//                        val publisher = volumeObj.optString("publisher")
-//                        val publishedDate = volumeObj.optString("publishedDate")
-//                        val description = volumeObj.optString("description")
-//                        val pageCount = volumeObj.optInt("pageCount")
-//                        val imageLinks = volumeObj.optJSONObject("imageLinks")
-//                        val thumbnail = if(imageLinks != null) imageLinks.optString("thumbnail") else ""
-//                        val previewLink = volumeObj.optString("previewLink")
-//                        val infoLink = volumeObj.optString("infoLink")
-//                        val saleInfoObj = itemsObj.optJSONObject("saleInfo")
-//                        val buyLink = if(saleInfoObj != null) saleInfoObj.optString("buyLink") else ""
-//                        val authorsArrayList = ArrayList<String>()
-//                        if (authorsArray.length() != 0) {
-//                            for (j in 0 until authorsArray.length()) {
-//                                authorsArrayList.add(authorsArray.optString(i))
-//                            }
-//                        }
-//                        // after extracting all the data we are
-//                        // saving this data in our modal class.
-//                        val bookInfo = BookInfo(
-//                            bookid,
-//                            json,
-//                            title,
-//                            subtitle,
-//                            authorsArrayList,
-//                            publisher,
-//                            publishedDate,
-//                            description,
-//                            pageCount,
-//                            thumbnail,
-//                            previewLink,
-//                            infoLink,
-//                            buyLink
-//                        )
-
-                        // below line is use to pass our modal
-                        // class in our array list.
-                        bookInfoArrayList!!.add(bookInfo)
-
-                        // below line is use to pass our
-                        // array list in adapter class.
-                        val adapter = BookAdapter(bookInfoArrayList!!, this@FindBookActivity)
-
-                        // below line is use to add linear layout
-                        // manager for our recycler view.
-                        val linearLayoutManager =
-                            LinearLayoutManager(this@FindBookActivity, RecyclerView.VERTICAL, false)
-                        val mRecyclerView = findViewById<View>(R.id.idRVBooks) as RecyclerView
-
-                        // in below line we are setting layout manager and
-                        // adapter to our recycler view.
-                        mRecyclerView.layoutManager = linearLayoutManager
-                        mRecyclerView.adapter = adapter
                     }
+                    // below line is use to pass our
+                    // array list in adapter class.
+                    val adapter = BookAdapter(bookInfoArrayList!!, this@FindBookActivity)
+
+                    // below line is use to add linear layout
+                    // manager for our recycler view.
+                    val linearLayoutManager =
+                        LinearLayoutManager(this@FindBookActivity, RecyclerView.VERTICAL, false)
+                    val mRecyclerView = findViewById<View>(R.id.idRVBooks) as RecyclerView
+
+                    // in below line we are setting layout manager and
+                    // adapter to our recycler view.
+                    mRecyclerView.layoutManager = linearLayoutManager
+                    mRecyclerView.adapter = adapter
                 } catch (e: JSONException) {
                     e.printStackTrace()
                     // displaying a toast message when we get any error from API
