@@ -19,7 +19,7 @@ interface BookDao {
     // The flow always holds/caches latest version of data. Notifies its observers when the
     // data has changed.
     @Query("SELECT * FROM book_table ORDER BY bookid ASC")
-    fun getAlphabetizedWords(): Flow<List<BookInfoRoom>>
+    fun getAlphabetizedBooks(): Flow<List<BookInfoRoom>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(book: BookInfoRoom)
