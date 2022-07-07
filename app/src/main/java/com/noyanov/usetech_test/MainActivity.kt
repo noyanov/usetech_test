@@ -4,6 +4,9 @@ package com.noyanov.usetech_test
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.widget.EditText
+import android.widget.Filterable
+import android.widget.SearchView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -30,6 +33,18 @@ class MainActivity : AppCompatActivity() {
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
 
+        val searchView = findViewById<SearchView>(R.id.idEdtFilterBooks)
+        searchView.setOnQueryTextListener(object:SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                adapter.filter.filter(query)
+                return false
+            }
+            override fun onQueryTextChange(newText: String?): Boolean {
+                adapter.filter.filter(newText)
+                return false
+            }
+        })
+
         val fab = findViewById<FloatingActionButton>(R.id.fab)
         fab.setOnClickListener {
 //            val intent = Intent(this@MainActivity, NewWordActivity::class.java)
@@ -37,7 +52,6 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this@MainActivity, FindBookActivity::class.java)
             startActivityForResult(intent, addBookActivityRequestCode)
         }
-
 
         // Add an observer on the LiveData returned by getAlphabetizedWords.
         // The onChanged() method fires when the observed data changes and the activity is
@@ -47,6 +61,7 @@ class MainActivity : AppCompatActivity() {
             books.let { adapter.submitList(it) }
         }
     }
+
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, intentData: Intent?) {
         super.onActivityResult(requestCode, resultCode, intentData)

@@ -5,6 +5,8 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Filter
+import android.widget.Filterable
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -15,13 +17,15 @@ import com.squareup.picasso.Picasso
 class BookAdapter     // creating constructor for array list and context.
     (// creating variables for arraylist and context.
     private val bookInfoArrayList: ArrayList<BookInfo>, private val mcontext: Context
-    ) : RecyclerView.Adapter<BookAdapter.BookViewHolder>() {
+    ) : RecyclerView.Adapter<BookAdapter.BookViewHolder>(), Filterable {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookViewHolder {
             // inflating our layout for item of recycler view item.
             val view: View =
                 LayoutInflater.from(parent.context).inflate(R.layout.book_rv_item, parent, false)
             return BookViewHolder(view)
     }
+
+    var bookInfoArrayListFiltered : ArrayList<BookInfo> = ArrayList()
 
     companion object {
         val detailsBookActivityRequestCode = 3
@@ -70,7 +74,7 @@ class BookAdapter     // creating constructor for array list and context.
     override fun getItemCount(): Int {
         // inside get item count method we
         // are returning the size of our array list.
-        return bookInfoArrayList.size
+        return bookInfoArrayListFiltered.size
     }
 
     inner class BookViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -90,6 +94,35 @@ class BookAdapter     // creating constructor for array list and context.
             dateTV = itemView.findViewById(R.id.idTVDate)
             bookIV = itemView.findViewById(R.id.idIVbook)
             favoriteIV = itemView.findViewById(R.id.idIVFavorites)
+        }
+    }
+
+    override fun getFilter(): Filter {
+        return object : Filter() {
+            override fun performFiltering(constraint: CharSequence?): FilterResults {
+                val charString = constraint?.toString() ?: ""
+                if (charString.isEmpty()) bookInfoArrayListFiltered = bookInfoArrayList else {
+                    val filteredList = ArrayList<BookInfo>()
+                    bookInfoArrayList
+                        .filter {
+                            (it.title.contains(constraint!!)) or
+                            (it.subtitle.contains(constraint) or
+                            (it.authors.joinToString().contains(constraint)) )
+                        }
+                        .forEach { filteredList.add(it) }
+                    bookInfoArrayListFiltered = filteredList
+
+                }
+                return FilterResults().apply { values = bookInfoArrayListFiltered }
+            }
+
+            override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
+                bookInfoArrayListFiltered = if (results?.values == null)
+                    ArrayList()
+                else
+                    results.values as ArrayList<BookInfo>
+                notifyDataSetChanged()
+            }
         }
     }
 }

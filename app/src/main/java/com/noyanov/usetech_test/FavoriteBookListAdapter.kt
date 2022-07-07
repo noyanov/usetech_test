@@ -3,6 +3,8 @@ package com.noyanov.usetech_test
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Filter
+import android.widget.Filterable
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
@@ -12,7 +14,14 @@ import com.noyanov.usetech_test.db.BookInfo
 import com.noyanov.usetech_test.db.BookInfoRoom
 import com.squareup.picasso.Picasso
 
-class FavoriteBookListAdapter : ListAdapter<BookInfoRoom, FavoriteBookListAdapter.FavoriteBookViewHolder>(BOOKS_COMPARATOR) {
+class FavoriteBookListAdapter : ListAdapter<BookInfoRoom, FavoriteBookListAdapter.FavoriteBookViewHolder>(BOOKS_COMPARATOR), Filterable
+{
+    var initialList : List<BookInfoRoom> = ArrayList()
+
+//    fun setData(list: List<BookInfoRoom>) {
+//        this.initialList = list
+//        submitList(list)
+//    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FavoriteBookViewHolder {
         return FavoriteBookViewHolder.create(parent)
@@ -26,7 +35,6 @@ class FavoriteBookListAdapter : ListAdapter<BookInfoRoom, FavoriteBookListAdapte
     }
 
     class FavoriteBookViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        //var bookItemView: TextView
         var nameTV: TextView
         var publisherTV: TextView
         var pageCountTV: TextView
@@ -34,7 +42,6 @@ class FavoriteBookListAdapter : ListAdapter<BookInfoRoom, FavoriteBookListAdapte
         var bookIV: ImageView
 
         init {
-            //bookItemView = itemView.findViewById(R.id.textView)
             nameTV = itemView.findViewById(R.id.idTVBookTitle)
             publisherTV = itemView.findViewById(R.id.idTVpublisher)
             pageCountTV = itemView.findViewById(R.id.idTVPageCount)
@@ -70,6 +77,43 @@ class FavoriteBookListAdapter : ListAdapter<BookInfoRoom, FavoriteBookListAdapte
 
             override fun areContentsTheSame(oldItem: BookInfoRoom, newItem: BookInfoRoom): Boolean {
                 return oldItem.bookid == newItem.bookid
+            }
+        }
+    }
+
+    override fun getFilter(): Filter {
+        return object : Filter() {
+            override fun performFiltering(constraint: CharSequence?): FilterResults {val charString = constraint?.toString() ?: ""
+                if(initialList.size == 0)
+                    initialList = currentList
+                var bookInfoArrayListFiltered : ArrayList<BookInfoRoom> = ArrayList()
+                if (charString.isEmpty()) bookInfoArrayListFiltered = ArrayList(initialList) else {
+                    val filteredList = ArrayList<BookInfoRoom>()
+                    initialList
+                        .forEach {
+                            val ti = it.getBookInfo();
+                            if(ti != null) {
+                                if (ti.title.contains(constraint!!) or
+                                    ti.subtitle.contains(constraint) or
+                                    ti.authors.joinToString().contains(constraint)
+                                ) {
+                                    filteredList.add(it)
+                                }
+                            }
+                        }
+                    bookInfoArrayListFiltered = filteredList
+                }
+                return FilterResults().apply { values = bookInfoArrayListFiltered }
+            }
+
+            override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
+                val filtered : MutableList<BookInfoRoom> = (results?.values) as MutableList<BookInfoRoom>
+                submitList(filtered)
+//                bookInfoArrayListFiltered = if (results?.values == null)
+//                    ArrayList()
+//                else
+//                    results.values as ArrayList<BookInfoRoom>
+//                notifyDataSetChanged()
             }
         }
     }

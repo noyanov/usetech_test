@@ -72,13 +72,12 @@ abstract class BookDatabase : RoomDatabase() {
         suspend fun populateDatabase(bookDao: BookDao) {
             // Start the app with a clean database every time.
             // Not needed if you only populate on creation.
+            bookDao.deleteAll()
             if(bookDao.getCount() == 0) {
-                bookDao.deleteAll()
-
-                var book = BookInfoRoom("Hello", "{Hello}")
-                bookDao.insert(book)
-                book = BookInfoRoom("World!", "{World}")
-                bookDao.insert(book)
+                for((bookid, json) in BookDatabaseExample.example) {
+                    var book = BookInfoRoom(bookid, json)
+                    bookDao.insert(book)
+                }
             }
         }
     }
