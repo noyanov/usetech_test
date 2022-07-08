@@ -23,7 +23,7 @@ android.permission.ACCESS_NETWORK_STATE
  
 
 Используем следующие библиотеки com.android.volley:volley - Google Volley для доступа в Интернет через HTTP запросы ( https://www.geeksforgeeks.org/volley-library-in-android/ )
-И библиотека Picasso для показа загрузки и показа миниатур com.squareup.picasso ( https://github.com/square/picasso )
+И библиотека Picasso для показа загрузки и показа миниатур com.squareup.picasso ( https://github.com/square/picasso ) (Для ее работы в manifest.xml пришлось добавить для приложения разрешение android:usesCleartextTraffic="true" )
 
 Для работы с ассинхронными операциями используется механизм coroutine, поэтому так же подключены библиотеки сопрограм.
 
