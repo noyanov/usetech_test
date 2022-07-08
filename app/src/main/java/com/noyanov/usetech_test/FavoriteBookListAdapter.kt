@@ -2,6 +2,7 @@ package com.noyanov.usetech_test
 
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,7 +15,15 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.noyanov.usetech_test.db.BookInfo
 import com.noyanov.usetech_test.db.BookInfoRoom
+import com.squareup.picasso.Callback
+import com.squareup.picasso.MemoryPolicy
+import com.squareup.picasso.OkHttp3Downloader
 import com.squareup.picasso.Picasso
+import okhttp3.OkHttpClient
+import okhttp3.Protocol
+import java.util.*
+import kotlin.collections.ArrayList
+
 
 class FavoriteBookListAdapter(private val mcontext: Context) : ListAdapter<BookInfoRoom, FavoriteBookListAdapter.FavoriteBookViewHolder>(BOOKS_COMPARATOR), Filterable
 {
@@ -34,6 +43,7 @@ class FavoriteBookListAdapter(private val mcontext: Context) : ListAdapter<BookI
         val bi = current.getBookInfo()
         if(bi != null) {
             holder.bind(bi)
+
             // below line is use to add on click listener for our item of recycler view.
             holder.itemView.setOnClickListener { // inside on click listener method we are calling a new activity
                 // and passing all the data of that item in next intent.
@@ -83,7 +93,16 @@ class FavoriteBookListAdapter(private val mcontext: Context) : ListAdapter<BookI
             dateTV.text = bi.publishedDate
 
             // below line is use to set image from URL in our image view.
-            Picasso.get().load(bi.thumbnail).into(bookIV)
+//            Picasso.get().load(bi.thumbnail).memoryPolicy(MemoryPolicy.NO_CACHE).into(bookIV, object : Callback {
+//                override fun onSuccess() {
+//                    bookIV.setVisibility(View.GONE)
+//                }
+//                override fun onError(e : Exception) {
+//                    bookIV.setVisibility(View.VISIBLE)
+//                }
+//            })
+
+            Picasso.get().load(bi.thumbnail).into(bookIV);
         }
 
         companion object {
